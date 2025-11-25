@@ -440,6 +440,24 @@ uint8_t Adafruit_AS5600::burnAngle() {
   }
 
   delay(10);
+      
+  if(!burn_reg.write((uint8_t)AS5600_BURN_VER_1)) {
+    return 2;
+  }
+
+  delay(10);
+      
+  if(!burn_reg.write((uint8_t)AS5600_BURN_VER_2)) {
+    return 2;
+  }
+
+  delay(10);
+      
+  if(!burn_reg.write((uint8_t)AS5600_BURN_VER_3)) {
+    return 2;
+  }
+
+  delay(10);
 
   return 0;
 }
