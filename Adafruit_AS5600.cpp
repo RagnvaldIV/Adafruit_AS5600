@@ -421,3 +421,65 @@ as5600_fast_filter_thresh_t Adafruit_AS5600::getFastFilterThresh() {
 
   return (as5600_fast_filter_thresh_t)fth_bits.read();
 }
+
+/*!
+ * @brief **WARNING** LIMITED BURN COUNT - MAY BRICK DEVICE. Burn the current ZPOS and MPOS values to NV-RAM. 
+ * @return 0 if write was successful, 1 for burn count exceeded, 2 for I2C error
+ */
+uint8_t Adafruit_AS5600::burnAngle() {
+  if(getZMCount() > 2) {
+    // Max burn count already exceeded, aborting
+    return 1;
+  }
+
+  Adafruit_BusIO_Register burn_reg =
+      Adafruit_BusIO_Register(i2c_dev, AS5600_REG_BURN, 1, MSBFIRST);
+      
+  if(!burn_reg.write((uint8_t)AS5600_BURN_ANGLE)) {
+    return 2;
+  }
+
+  delay(10);
+
+  return 0;
+}
+
+/*!
+ * @brief **WARNING** LIMITED BURN COUNT - MAY BRICK DEVICE. Burn the current settings values to NV-RAM
+ * @return 0 if write was successful, 1 for burn count exceeded, 2 for I2C error
+ */
+uint8_t Adafruit_AS5600::burnSettings() {
+  if(getZMCount() > 2) {
+    // Max burn count already exceeded, aborting
+    return 1;
+  }
+
+  Adafruit_BusIO_Register burn_reg =
+      Adafruit_BusIO_Register(i2c_dev, AS5600_REG_BURN, 1, MSBFIRST);
+      
+  if(!burn_reg.write((uint8_t)AS5600_BURN_SETTING)) {
+    return 2;
+  }
+
+  delay(10);
+      
+  if(!burn_reg.write((uint8_t)AS5600_BURN_VER_1)) {
+    return 2;
+  }
+
+  delay(10);
+      
+  if(!burn_reg.write((uint8_t)AS5600_BURN_VER_2)) {
+    return 2;
+  }
+
+  delay(10);
+      
+  if(!burn_reg.write((uint8_t)AS5600_BURN_VER_3)) {
+    return 2;
+  }
+
+  delay(10);
+
+  return 0;
+}

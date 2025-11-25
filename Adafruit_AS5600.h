@@ -103,6 +103,17 @@ typedef enum {
 } as5600_fast_filter_thresh_t;
 
 /*!
+ * @brief Burn values for permanently writing to NV-RAM on AS5600
+ */
+typedef enum {
+  AS5600_BURN_ANGLE = 0x80,   // Burn angle (ZPOS and MPOS)
+  AS5600_BURN_SETTING = 0x40, // Burn settings (MANG)
+  AS5600_BURN_VER_1 = 0x01,   // First step of verification after BURN_SETTING
+  AS5600_BURN_VER_2 = 0x11,   // Second step of verification after BURN_SETTING
+  AS5600_BURN_VER_3 = 0x10    // Third step of verification after BURN_SETTING
+} as5600_burn_t;
+
+/*!
  * @brief Main AS5600 class for 12-bit contactless position sensor
  */
 class Adafruit_AS5600 {
@@ -140,6 +151,8 @@ class Adafruit_AS5600 {
   as5600_slow_filter_t getSlowFilter();
   bool setFastFilterThresh(as5600_fast_filter_thresh_t thresh);
   as5600_fast_filter_thresh_t getFastFilterThresh();
+  uint8_t burnAngle();
+  uint8_t burnSettings();
 
  private:
   Adafruit_I2CDevice* i2c_dev;
